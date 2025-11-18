@@ -1,9 +1,7 @@
--- Create Database
-CREATE DATABASE IF NOT EXISTS shopee_db2;
-USE shopee_db2;
+USE synergy1_Shop_Test;
 
 -- Users Table (with admin, seller, customer roles)
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) UNIQUE NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
@@ -16,7 +14,7 @@ CREATE TABLE users (
 );
 
 -- Categories Table
-CREATE TABLE categories (
+CREATE TABLE IF NOT EXISTS categories (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     description TEXT,
@@ -24,7 +22,7 @@ CREATE TABLE categories (
 );
 
 -- Products Table (removed seller_id - now many-to-many)
-CREATE TABLE products (
+CREATE TABLE IF NOT EXISTS products (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(200) NOT NULL,
     description TEXT,
@@ -35,7 +33,7 @@ CREATE TABLE products (
 );
 
 -- Product_Sellers (Many-to-Many: Multiple sellers can sell the same product)
-CREATE TABLE product_sellers (
+CREATE TABLE IF NOT EXISTS product_sellers (
     product_id INT NOT NULL,
     seller_id INT NOT NULL,
     seller_price DECIMAL(10, 2),
@@ -46,7 +44,7 @@ CREATE TABLE product_sellers (
 );
 
 -- Product_Categories (Many-to-Many)
-CREATE TABLE product_categories (
+CREATE TABLE IF NOT EXISTS product_categories (
     product_id INT,
     category_id INT,
     PRIMARY KEY (product_id, category_id),
@@ -55,7 +53,7 @@ CREATE TABLE product_categories (
 );
 
 -- Cart Table (updated to include seller_id)
-CREATE TABLE cart (
+CREATE TABLE IF NOT EXISTS cart (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     product_id INT NOT NULL,
@@ -69,7 +67,7 @@ CREATE TABLE cart (
 );
 
 -- Orders Table
-CREATE TABLE orders (
+CREATE TABLE IF NOT EXISTS orders (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     total_amount DECIMAL(10, 2) NOT NULL,
@@ -81,7 +79,7 @@ CREATE TABLE orders (
 );
 
 -- Order_Items Table (Many-to-Many with seller info)
-CREATE TABLE order_items (
+CREATE TABLE IF NOT EXISTS order_items (
     id INT AUTO_INCREMENT PRIMARY KEY,
     order_id INT NOT NULL,
     product_id INT NOT NULL,
@@ -93,12 +91,6 @@ CREATE TABLE order_items (
     FOREIGN KEY (seller_id) REFERENCES users(id)
 );
 
--- Insert Sample Data
-INSERT INTO users (username, email, password, full_name, role) VALUES
-('admin', 'admin@shopee.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Admin User', 'admin'),
-('seller1', 'seller1@shopee.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Seller One', 'seller'),
-('seller2', 'seller2@shopee.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'Seller Two', 'seller'),
-('john_doe', 'john@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'John Doe', 'customer');
 
 INSERT INTO categories (name, description) VALUES
 ('Electronics', 'Electronic devices and accessories'),
@@ -114,21 +106,10 @@ INSERT INTO products (name, description, price, stock) VALUES
 ('Laptop Stand', 'Ergonomic laptop stand', 39.99, 25),
 ('Programming Book', 'Learn PHP and MySQL', 49.99, 15);
 
--- Many-to-Many: Multiple sellers selling the same products
-INSERT INTO product_sellers (product_id, seller_id, seller_price, seller_stock) VALUES
-(1, 2, 299.99, 25),
-(1, 3, 289.99, 30),
-(2, 2, 89.99, 15),
-(2, 3, 85.99, 20),
-(3, 2, 19.99, 50),
-(4, 3, 39.99, 25),
-(5, 2, 49.99, 10),
-(5, 3, 45.99, 8);
-
 INSERT INTO product_categories (product_id, category_id) VALUES
 (1, 1), (2, 1), (3, 2), (4, 1), (5, 4);
 
-CREATE TABLE password_resets (
+CREATE TABLE IF NOT EXISTS password_resets (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
     token_hash VARCHAR(64) NOT NULL,

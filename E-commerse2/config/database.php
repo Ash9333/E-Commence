@@ -1,8 +1,8 @@
 <?php
 define('DB_HOST', 'localhost');
-define('DB_USER', 'root');
-define('DB_PASS', '');
-define('DB_NAME', 'shopee_db2');
+define('DB_USER', 'synergy1');
+define('DB_PASS', 'wEyUs2Vj_@vcv%;*');
+define('DB_NAME', 'synergy1_Shop_Test');
 
 function getDB() {
     try {
