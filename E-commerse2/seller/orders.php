@@ -1,0 +1,129 @@
+<?php
+require_once '../config/database.php';
+require_once '../includes/functions.php';
+require_once '../includes/mailer.php';
+
+if (!isLoggedIn() || !isSeller()) {
+    header('Location: ../login.php');
+    exit;
+}
+
+$conn      = getDB();
+cleanupOldCancelledOrders(10);
+$seller_id = $_SESSION['user_id'];
+
+// Allow seller to update order status, but only for orders that contain their items
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['order_id'], $_POST['status'])) {
+    $order_id = (int)$_POST['order_id'];
+    $status   = sanitize($_POST['status']);
+
+    // Verify this order contains items sold by this seller
+    $stmt = $conn->prepare("SELECT 1
+                            FROM order_items
+                            WHERE order_id = ? AND seller_id = ?
+                            LIMIT 1");
+    $stmt->bind_param('ii', $order_id, $seller_id);
+    $stmt->execute();
+    $owns = $stmt->get_result()->fetch_assoc();
+
+    if ($owns) {
+        $stmt = $conn->prepare("SELECT o.status, o.total_amount, u.full_name, u.email FROM orders o INNER JOIN users u ON o.user_id = u.id WHERE o.id = ?");
+        $stmt->bind_param('i', $order_id);
+        $stmt->execute();
+        $orderInfo = $stmt->get_result()->fetch_assoc();
+
+        $sendCancelEmail = false;
+        if ($orderInfo && $orderInfo['status'] !== 'cancelled' && $status === 'cancelled') {
+            $sendCancelEmail = true;
+        }
+
+        if ($status === 'cancelled') {
+            $stmt = $conn->prepare("UPDATE orders SET status = ?, cancelled_at = NOW() WHERE id = ?");
+        } else {
+            $stmt = $conn->prepare("UPDATE orders SET status = ?, cancelled_at = NULL WHERE id = ?");
+        }
+        $stmt->bind_param('si', $status, $order_id);
+        $stmt->execute();
+
+        if ($sendCancelEmail) {
+            sendOrderCancelledEmail($orderInfo['email'], $orderInfo['full_name'], $order_id, (float)$orderInfo['total_amount']);
+        }
+
+        $_SESSION['success'] = 'Order status updated successfully.';
+    }
+
+    header('Location: orders.php');
+    exit;
+}
+
+// Get orders that contain this seller's items
+$stmt = $conn->prepare("SELECT DISTINCT o.*, u.full_name, u.email
+                        FROM orders o
+                        INNER JOIN order_items oi ON oi.order_id = o.id
+                        INNER JOIN users u ON o.user_id = u.id
+                        WHERE oi.seller_id = ?
+                        ORDER BY o.created_at DESC");
+$stmt->bind_param('i', $seller_id);
+$stmt->execute();
+$orders = $stmt->get_result();
+
+$page_title = 'My Orders';
+$base_url   = '../';
+include '../includes/header.php';
+
+if (isset($_SESSION['success'])) {
+    echo '<div class="alert alert-success">' . $_SESSION['success'] . '</div>';
+    unset($_SESSION['success']);
+}
+?>
+
+<h1>My Orders</h1>
+<p>These are orders that include products you sold. You can update their status here.</p>
+
+<?php if ($orders->num_rows > 0): ?>
+    <table class="cart-table">
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Customer</th>
+                <th>Total Amount</th>
+                <th>Status</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php while ($order = $orders->fetch_assoc()): ?>
+                <tr>
+                    <td>#<?php echo $order['id']; ?></td>
+                    <td>
+                        <strong><?php echo htmlspecialchars($order['full_name']); ?></strong><br>
+                        <small style="color: #666;"><?php echo htmlspecialchars($order['email']); ?></small>
+                    </td>
+                    <td><?php echo formatPrice($order['total_amount']); ?></td>
+                    <td>
+                        <form method="POST" style="display: inline;">
+                            <input type="hidden" name="order_id" value="<?php echo $order['id']; ?>">
+                            <select name="status" onchange="this.form.submit()" 
+                                    style="padding: 5px; border-radius: 4px; border: 1px solid #ddd;">
+                                <option value="pending" <?php echo $order['status'] === 'pending' ? 'selected' : ''; ?>>Pending</option>
+                                <option value="processing" <?php echo $order['status'] === 'processing' ? 'selected' : ''; ?>>Processing</option>
+                                <option value="shipped" <?php echo $order['status'] === 'shipped' ? 'selected' : ''; ?>>Shipped</option>
+                                <option value="delivered" <?php echo $order['status'] === 'delivered' ? 'selected' : ''; ?>>Delivered</option>
+                                <option value="cancelled" <?php echo $order['status'] === 'cancelled' ? 'selected' : ''; ?>>Cancelled</option>
+                            </select>
+                        </form>
+                    </td>
+                    <td><?php echo date('Y-m-d H:i', strtotime($order['created_at'])); ?></td>
+                </tr>
+            <?php endwhile; ?>
+        </tbody>
+    </table>
+<?php else: ?>
+    <p>You don’t have any orders yet.</p>
+<?php endif; ?>
+
+<div style="margin-top: 20px;">
+    <a href="index.php" class="btn btn-secondary">← Back to Seller Dashboard</a>
+</div>
+
+<?php include '../includes/footer.php'; ?>
