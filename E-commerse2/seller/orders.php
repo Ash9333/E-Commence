@@ -67,7 +67,7 @@ $stmt->bind_param('i', $seller_id);
 $stmt->execute();
 $orders = $stmt->get_result();
 
-$page_title = 'My Orders';
+$page_title = t('seller_orders_title');
 $base_url   = '../';
 include '../includes/header.php';
 
@@ -77,18 +77,18 @@ if (isset($_SESSION['success'])) {
 }
 ?>
 
-<h1>My Orders</h1>
-<p>These are orders that include products you sold. You can update their status here.</p>
+<h1><?php echo t('seller_orders_title'); ?></h1>
+<p><?php echo t('seller_orders_intro'); ?></p>
 
 <?php if ($orders->num_rows > 0): ?>
     <table class="cart-table">
         <thead>
             <tr>
-                <th>Order ID</th>
-                <th>Customer</th>
-                <th>Total Amount</th>
-                <th>Status</th>
-                <th>Date</th>
+                <th><?php echo t('seller_orders_order_id'); ?></th>
+                <th><?php echo t('seller_orders_customer'); ?></th>
+                <th><?php echo t('seller_orders_total_amount'); ?></th>
+                <th><?php echo t('seller_orders_status'); ?></th>
+                <th><?php echo t('seller_orders_date'); ?></th>
             </tr>
         </thead>
         <tbody>
@@ -105,11 +105,11 @@ if (isset($_SESSION['success'])) {
                             <input type="hidden" name="order_id" value="<?php echo $order['id']; ?>">
                             <select name="status" onchange="this.form.submit()" 
                                     style="padding: 5px; border-radius: 4px; border: 1px solid #ddd;">
-                                <option value="pending" <?php echo $order['status'] === 'pending' ? 'selected' : ''; ?>>Pending</option>
-                                <option value="processing" <?php echo $order['status'] === 'processing' ? 'selected' : ''; ?>>Processing</option>
-                                <option value="shipped" <?php echo $order['status'] === 'shipped' ? 'selected' : ''; ?>>Shipped</option>
-                                <option value="delivered" <?php echo $order['status'] === 'delivered' ? 'selected' : ''; ?>>Delivered</option>
-                                <option value="cancelled" <?php echo $order['status'] === 'cancelled' ? 'selected' : ''; ?>>Cancelled</option>
+                                <option value="pending" <?php echo $order['status'] === 'pending' ? 'selected' : ''; ?>><?php echo t('order_status_pending'); ?></option>
+                                <option value="processing" <?php echo $order['status'] === 'processing' ? 'selected' : ''; ?>><?php echo t('order_status_processing'); ?></option>
+                                <option value="shipped" <?php echo $order['status'] === 'shipped' ? 'selected' : ''; ?>><?php echo t('order_status_shipped'); ?></option>
+                                <option value="delivered" <?php echo $order['status'] === 'delivered' ? 'selected' : ''; ?>><?php echo t('order_status_delivered'); ?></option>
+                                <option value="cancelled" <?php echo $order['status'] === 'cancelled' ? 'selected' : ''; ?>><?php echo t('order_status_cancelled'); ?></option>
                             </select>
                         </form>
                     </td>
@@ -119,11 +119,11 @@ if (isset($_SESSION['success'])) {
         </tbody>
     </table>
 <?php else: ?>
-    <p>You don’t have any orders yet.</p>
+    <p><?php echo t('seller_orders_no_orders'); ?></p>
 <?php endif; ?>
 
 <div style="margin-top: 20px;">
-    <a href="index.php" class="btn btn-secondary">← Back to Seller Dashboard</a>
+    <a href="index.php" class="btn btn-secondary"><?php echo t('seller_orders_back_to_dashboard'); ?></a>
 </div>
 
 <?php include '../includes/footer.php'; ?>

@@ -12,27 +12,29 @@ document.addEventListener("DOMContentLoaded", function () {
   const themeToggle = document.getElementById("theme-toggle");
   const savedTheme = localStorage.getItem("theme");
 
-  if (savedTheme === "dark") {
+  const initialIsDark = savedTheme === "dark";
+  if (initialIsDark) {
     document.body.classList.add("dark-mode");
-    if (themeToggle) {
-      themeToggle.textContent = "☀️ Light";
-    }
-  } else {
-    if (themeToggle) {
-      themeToggle.textContent = "🌙 Night";
-    }
   }
 
   if (themeToggle) {
+    const nightLabel = themeToggle.dataset.labelNight || "Night";
+    const lightLabel = themeToggle.dataset.labelLight || "Light";
+
+    function setThemeLabel(isDark) {
+      if (isDark) {
+        themeToggle.textContent = "☀️ " + lightLabel;
+      } else {
+        themeToggle.textContent = "🌙 " + nightLabel;
+      }
+    }
+
+    setThemeLabel(initialIsDark);
+
     themeToggle.addEventListener("click", function () {
       const isDark = document.body.classList.toggle("dark-mode");
-      if (isDark) {
-        localStorage.setItem("theme", "dark");
-        themeToggle.textContent = "☀️ Light";
-      } else {
-        localStorage.setItem("theme", "light");
-        themeToggle.textContent = "🌙 Night";
-      }
+      localStorage.setItem("theme", isDark ? "dark" : "light");
+      setThemeLabel(isDark);
     });
   }
 });

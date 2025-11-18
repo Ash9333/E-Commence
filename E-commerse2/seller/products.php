@@ -65,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bind_param("iidi", $product_id, $seller_id, $price, $stock);
         $stmt->execute();
 
-        $_SESSION['success'] = 'Product created successfully.';
+        $_SESSION['success'] = t('flash_product_created');
         header('Location: products.php');
         exit;
     }
@@ -84,7 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bind_param("diii", $seller_price, $seller_stock, $product_id, $seller_id);
         $stmt->execute();
 
-        $_SESSION['success'] = 'Product updated successfully.';
+        $_SESSION['success'] = t('flash_product_updated');
         header('Location: products.php');
         exit;
     } elseif ($form_type === 'delete') {
@@ -121,7 +121,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         }
 
-        $_SESSION['success'] = 'You have stopped selling this product.';
+        $_SESSION['success'] = t('flash_product_stopped_selling');
         header('Location: products.php');
         exit;
     }
@@ -137,7 +137,7 @@ $stmt->bind_param('i', $seller_id);
 $stmt->execute();
 $products = $stmt->get_result();
 
-$page_title = 'My Products';
+$page_title = t('seller_products_title');
 $base_url   = '../';
 include '../includes/header.php';
 
@@ -147,47 +147,47 @@ if (isset($_SESSION['success'])) {
 }
 ?>
 
-<h1>My Products</h1>
-<p>Create and manage the products you sell.</p>
+<h1><?php echo t('seller_products_title'); ?></h1>
+<p><?php echo t('seller_products_intro'); ?></p>
 
 <div style="margin: 20px 0; padding: 20px; background: #fff; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
-    <h2 style="margin-bottom: 15px;">Add New Product</h2>
+    <h2 style="margin-bottom: 15px;"><?php echo t('seller_products_add_new'); ?></h2>
     <form method="POST" enctype="multipart/form-data" style="display: grid; gap: 10px; max-width: 500px;">
         <input type="hidden" name="form_type" value="add">
         <div class="form-group">
-            <label>Name:</label>
+            <label><?php echo t('seller_products_name'); ?>:</label>
             <input type="text" name="name" required>
         </div>
         <div class="form-group">
-            <label>Description:</label>
+            <label><?php echo t('seller_products_description'); ?>:</label>
             <textarea name="description" required></textarea>
         </div>
         <div class="form-group">
-            <label>Price:</label>
+            <label><?php echo t('seller_products_price'); ?>:</label>
             <input type="number" name="price" step="0.01" min="0" required>
         </div>
         <div class="form-group">
-            <label>Stock:</label>
+            <label><?php echo t('seller_products_stock'); ?>:</label>
             <input type="number" name="stock" min="0" required>
         </div>
         <div class="form-group">
-            <label>Image:</label>
+            <label><?php echo t('seller_products_image'); ?>:</label>
             <input type="file" name="image" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp">
         </div>
-        <button type="submit" class="btn btn-primary">Create Product</button>
+        <button type="submit" class="btn btn-primary"><?php echo t('seller_products_create_button'); ?></button>
     </form>
 </div>
 
 <?php if ($products->num_rows > 0): ?>
-    <h2 style="margin-top: 30px;">Your Products</h2>
+    <h2 style="margin-top: 30px;"><?php echo t('seller_products_your_products'); ?></h2>
     <table class="cart-table">
         <thead>
             <tr>
-                <th>Image</th>
-                <th>Name</th>
-                <th>Price / Stock</th>
-                <th>Created</th>
-                <th>Actions</th>
+                <th><?php echo t('seller_products_image_column'); ?></th>
+                <th><?php echo t('seller_products_name_column'); ?></th>
+                <th><?php echo t('seller_products_price_stock_column'); ?></th>
+                <th><?php echo t('seller_products_created_column'); ?></th>
+                <th><?php echo t('seller_products_actions_column'); ?></th>
             </tr>
         </thead>
         <tbody>
@@ -199,7 +199,9 @@ if (isset($_SESSION['success'])) {
                                  alt="<?php echo htmlspecialchars($product['name']); ?>" 
                                  style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;">
                         <?php else: ?>
-                            <div style="width: 50px; height: 50px; background: #f0f0f0; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 0.8rem;">No Image</div>
+                            <div style="width: 50px; height: 50px; background: #f0f0f0; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 0.8rem;">
+                                <?php echo t('seller_products_no_image'); ?>
+                            </div>
                         <?php endif; ?>
                     </td>
                     <td><?php echo htmlspecialchars($product['name']); ?></td>
@@ -213,28 +215,36 @@ if (isset($_SESSION['success'])) {
                             <input type="number" name="seller_stock" min="0" 
                                    value="<?php echo (int)$product['seller_stock']; ?>" 
                                    style="width: 80px; padding: 3px;">
+                            <button type="submit" class="btn btn-secondary" style="margin-right: 5px;">
+                                <?php echo t('seller_products_save'); ?>
+                            </button>
+                        </form>
+                        <a href="edit_product.php?id=<?php echo $product['id']; ?>" class="btn btn-secondary" style="margin-right: 5px;">
+                            <?php echo t('seller_products_edit_details'); ?>
+                        </a>
+                        <form method="POST" style="display: inline;" onsubmit="return confirm('<?php echo t('confirm_stop_selling_product'); ?>');">
+                            <input type="hidden" name="form_type" value="delete">
+                            <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
+                            <button type="submit" class="btn btn-secondary" style="background: #dc3545;">
+                                <?php echo t('seller_products_stop_selling'); ?>
+                            </button>
+                        </form>
                     </td>
                     <td><?php echo date('Y-m-d', strtotime($product['created_at'])); ?></td>
                     <td>
-                            <button type="submit" class="btn btn-secondary" style="margin-right: 5px;">Save</button>
-                        </form>
-                        <a href="edit_product.php?id=<?php echo $product['id']; ?>" class="btn btn-secondary" style="margin-right: 5px;">Edit Details</a>
-                        <form method="POST" style="display: inline;" onsubmit="return confirm('Stop selling this product?');">
-                            <input type="hidden" name="form_type" value="delete">
-                            <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
-                            <button type="submit" class="btn btn-secondary" style="background: #dc3545;">Stop Selling</button>
-                        </form>
                     </td>
                 </tr>
             <?php endwhile; ?>
         </tbody>
     </table>
 <?php else: ?>
-    <p>You are not selling any products yet. Use the form above to create your first product.</p>
+    <p><?php echo t('seller_products_not_selling'); ?></p>
 <?php endif; ?>
 
 <div style="margin-top: 20px;">
-    <a href="index.php" class="btn btn-secondary">← Back to Seller Dashboard</a>
+    <a href="index.php" class="btn btn-secondary">
+        <?php echo t('seller_products_back_to_dashboard'); ?>
+    </a>
 </div>
 
 <?php include '../includes/footer.php'; ?>

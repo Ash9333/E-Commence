@@ -38,7 +38,7 @@ $platform_fee_rate  = 0.10;
 $stats_platform_fee = $stats_gross_revenue * $platform_fee_rate;
 $stats_net_revenue  = $stats_gross_revenue - $stats_platform_fee;
 
-$page_title = 'Seller Dashboard';
+$page_title = t('seller_dashboard_title');
 $base_url   = '../';
 include '../includes/header.php';
 
@@ -48,39 +48,39 @@ if (isset($_SESSION['success'])) {
 }
 ?>
 
-<h1>Seller Dashboard</h1>
-<p>Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?>. Here is an overview of your sales activity.</p>
+<h1><?php echo t('seller_dashboard_title'); ?></h1>
+<p><?php echo sprintf(t('seller_dashboard_welcome'), htmlspecialchars($_SESSION['username'])); ?></p>
 
 <!-- Seller Stats -->
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin: 30px 0;">
     <div style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
         <div style="font-size: 2rem; font-weight: bold; margin-bottom: 8px;"><?php echo (int)$stats_products; ?></div>
-        <div>Total Products</div>
+        <div><?php echo t('seller_dashboard_total_products'); ?></div>
     </div>
     <div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
         <div style="font-size: 2rem; font-weight: bold; margin-bottom: 8px;"><?php echo (int)$stats_orders; ?></div>
-        <div>Total Orders</div>
+        <div><?php echo t('seller_dashboard_total_orders'); ?></div>
     </div>
     <div style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
         <div style="font-size: 2rem; font-weight: bold; margin-bottom: 8px;"><?php echo formatPrice($stats_gross_revenue ?? 0); ?></div>
-        <div>Gross Revenue</div>
+        <div><?php echo t('seller_dashboard_gross_revenue'); ?></div>
     </div>
     <div style="background: linear-gradient(135deg, #f6d365 0%, #fda085 100%); color: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
         <div style="font-size: 2rem; font-weight: bold; margin-bottom: 8px;"><?php echo formatPrice($stats_platform_fee ?? 0); ?></div>
-        <div>Platform Fees (10%)</div>
+        <div><?php echo t('seller_dashboard_platform_fees'); ?></div>
     </div>
     <div style="background: linear-gradient(135deg, #16a085 0%, #27ae60 100%); color: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
         <div style="font-size: 2rem; font-weight: bold; margin-bottom: 8px;"><?php echo formatPrice($stats_net_revenue ?? 0); ?></div>
-        <div>Net Revenue (after fees)</div>
+        <div><?php echo t('seller_dashboard_net_revenue'); ?></div>
     </div>
 </div>
 
 <!-- Seller Quick Actions -->
-<h2 style="margin-bottom: 20px;">Seller Actions</h2>
+<h2 style="margin-bottom: 20px;"><?php echo t('seller_dashboard_actions'); ?></h2>
 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 40px;">
-    <a href="products.php" class="btn btn-primary" style="padding: 20px; text-align: center; font-size: 1.1rem; text-decoration: none; display: block;">📦 My Products</a>
-    <a href="orders.php" class="btn btn-secondary" style="padding: 20px; text-align: center; font-size: 1.1rem; text-decoration: none; display: block;">🛒 My Orders</a>
-    <a href="../index.php" class="btn btn-secondary" style="padding: 20px; text-align: center; font-size: 1.1rem; text-decoration: none; display: block;">🏠 Back to Store</a>
+    <a href="products.php" class="btn btn-primary" style="padding: 20px; text-align: center; font-size: 1.1rem; text-decoration: none; display: block;">📦 <?php echo t('seller_dashboard_my_products'); ?></a>
+    <a href="orders.php" class="btn btn-secondary" style="padding: 20px; text-align: center; font-size: 1.1rem; text-decoration: none; display: block;">🛒 <?php echo t('seller_dashboard_my_orders'); ?></a>
+    <a href="../index.php" class="btn btn-secondary" style="padding: 20px; text-align: center; font-size: 1.1rem; text-decoration: none; display: block;">🏠 <?php echo t('seller_dashboard_back_to_store'); ?></a>
 </div>
 
 <?php include '../includes/footer.php'; ?>

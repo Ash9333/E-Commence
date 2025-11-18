@@ -21,7 +21,7 @@ $stmt->execute();
 $product = $stmt->get_result()->fetch_assoc();
 
 if (!$product) {
-    $_SESSION['error'] = 'Product not found or not associated with your seller account.';
+    $_SESSION['error'] = t('error_seller_product_not_found');
     header('Location: products.php');
     exit;
 }
@@ -78,12 +78,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->bind_param('diii', $seller_price, $seller_stock, $product_id, $seller_id);
     $stmt->execute();
 
-    $_SESSION['success'] = 'Product updated successfully.';
+    $_SESSION['success'] = t('flash_product_updated');
     header('Location: products.php');
     exit;
 }
 
-$page_title = 'Edit Product';
+$page_title = t('seller_edit_title');
 $base_url   = '../';
 include '../includes/header.php';
 
@@ -93,37 +93,37 @@ if (isset($_SESSION['error'])) {
 }
 ?>
 
-<h1>Edit Product</h1>
-<p>Update the details for this product.</p>
+<h1><?php echo t('seller_edit_title'); ?></h1>
+<p><?php echo t('seller_edit_intro'); ?></p>
 
 <div class="form-container" style="max-width: 600px;">
     <form method="POST" enctype="multipart/form-data">
         <div class="form-group">
-            <label>Product Name:</label>
+            <label><?php echo t('seller_products_name'); ?>:</label>
             <input type="text" name="name" value="<?php echo htmlspecialchars($product['name']); ?>" required>
         </div>
         <div class="form-group">
-            <label>Description:</label>
+            <label><?php echo t('seller_products_description'); ?>:</label>
             <textarea name="description" required><?php echo htmlspecialchars($product['description']); ?></textarea>
         </div>
         <div class="form-group">
-            <label>Base Price (visible to all sellers):</label>
+            <label><?php echo t('seller_edit_base_price_label'); ?></label>
             <input type="number" name="base_price" step="0.01" min="0" value="<?php echo $product['price']; ?>" required>
         </div>
         <div class="form-group">
-            <label>Base Stock:</label>
+            <label><?php echo t('seller_edit_base_stock_label'); ?></label>
             <input type="number" name="base_stock" min="0" value="<?php echo $product['stock']; ?>" required>
         </div>
         <div class="form-group">
-            <label>Your Selling Price:</label>
+            <label><?php echo t('seller_edit_seller_price_label'); ?></label>
             <input type="number" name="seller_price" step="0.01" min="0" value="<?php echo $product['seller_price']; ?>" required>
         </div>
         <div class="form-group">
-            <label>Your Stock:</label>
+            <label><?php echo t('seller_edit_seller_stock_label'); ?></label>
             <input type="number" name="seller_stock" min="0" value="<?php echo $product['seller_stock']; ?>" required>
         </div>
         <div class="form-group">
-            <label>Product Image:</label>
+            <label><?php echo t('seller_products_image'); ?>:</label>
             <?php if (!empty($product['image'])): ?>
                 <div style="margin-bottom: 10px;">
                     <img src="../<?php echo htmlspecialchars($product['image']); ?>" 
@@ -132,11 +132,11 @@ if (isset($_SESSION['error'])) {
                 </div>
             <?php endif; ?>
             <input type="file" name="image" accept="image/jpeg,image/jpg,image/png,image/gif,image/webp">
-            <small style="color:#666;">Leave empty to keep the current image.</small>
+            <small style="color:#666;"><?php echo t('seller_edit_image_hint'); ?></small>
         </div>
 
-        <button type="submit" class="btn btn-primary">Save Changes</button>
-        <a href="products.php" class="btn btn-secondary">Cancel</a>
+        <button type="submit" class="btn btn-primary"><?php echo t('seller_edit_save_changes'); ?></button>
+        <a href="products.php" class="btn btn-secondary"><?php echo t('button_cancel'); ?></a>
     </form>
 </div>
 

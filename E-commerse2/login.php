@@ -25,8 +25,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['username'] = $user['username'];
         $_SESSION['role'] = $user['role'];
-        
-        // Redirect admins to admin panel
+
+        if (!empty($user['language'])) {
+            setCurrentLanguage($user['language']);
+        }
+
+        if (empty($user['language'])) {
+            header('Location: choose_language.php');
+            exit;
+        }
+
         if ($user['role'] === 'admin') {
             header('Location: admin/index.php');
         } else {

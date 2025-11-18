@@ -51,10 +51,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         }
                     }
                 } else {
-                    $_SESSION['error'] = 'Failed to upload image';
+                    $_SESSION['error'] = t('flash_image_upload_failed');
                 }
             } else {
-                $_SESSION['error'] = 'Invalid file type. Only JPG, JPEG, PNG, GIF, and WEBP are allowed.';
+                $_SESSION['error'] = t('flash_invalid_file_type');
             }
         }
         
@@ -69,7 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
                 $stmt->execute();
                 $product_id = $conn->insert_id;
-                $_SESSION['success'] = 'Product added successfully';
+                $_SESSION['success'] = t('flash_product_added');
             } else if ($action === 'edit' && $product_id) {
                 if ($image_path) {
                     $stmt = $conn->prepare("UPDATE products SET name = ?, description = ?, price = ?, stock = ?, image = ? WHERE id = ?");
@@ -79,7 +79,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $stmt->bind_param("ssdii", $name, $description, $price, $stock, $product_id);
                 }
                 $stmt->execute();
-                $_SESSION['success'] = 'Product updated successfully';
+                $_SESSION['success'] = t('flash_product_updated');
             }
             
             // Handle sellers (many-to-many)
@@ -282,7 +282,7 @@ if (isset($_SESSION['error'])) {
         <button type="submit" class="btn btn-primary">
             <?php echo $action === 'add' ? 'Add Product' : 'Update Product'; ?>
         </button>
-        <a href="products.php" class="btn btn-secondary">Cancel</a>
+        <a href="products.php" class="btn btn-secondary"><?php echo t('button_cancel'); ?></a>
     </form>
 </div>
 
@@ -337,7 +337,7 @@ $products = $stmt->get_result();
                         <a href="products.php?action=edit&id=<?php echo $product['id']; ?>" class="btn btn-secondary">Edit</a>
                         <a href="products.php?action=delete&id=<?php echo $product['id']; ?>" 
                            class="btn btn-secondary" 
-                           onclick="return confirm('Are you sure you want to delete this product?')"
+                           onclick="return confirm('<?php echo t('confirm_delete_product'); ?>')"
                            style="background: #dc3545;">Delete</a>
                     </td>
                 </tr>
@@ -361,6 +361,10 @@ if ($action === 'delete' && $product_id) {
     $stmt->execute();
     $product = $stmt->get_result()->fetch_assoc();
     
+    $stmt = $conn->prepare("DELETE FROM order_items WHERE product_id = ?");
+    $stmt->bind_param("i", $product_id);
+    $stmt->execute();
+    
     // Delete product (cascades will handle related records)
     $stmt = $conn->prepare("DELETE FROM products WHERE id = ?");
     $stmt->bind_param("i", $product_id);
@@ -371,11 +375,11 @@ if ($action === 'delete' && $product_id) {
         unlink('../' . $product['image']);
     }
     
-    $_SESSION['success'] = 'Product deleted successfully';
+    $_SESSION['success'] = t('flash_product_deleted');
     header('Location: products.php');
     exit;
 }
-
-include '../includes/footer.php';
 ?>
+
+<?php include '../includes/footer.php'; ?>
 <script src="../js/admin_products.js"></script>

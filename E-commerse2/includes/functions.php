@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/../config/database.php';
+require_once __DIR__ . '/lang.php';
 
 function isLoggedIn() {
     return isset($_SESSION['user_id']);

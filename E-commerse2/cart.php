@@ -21,7 +21,7 @@ $cart_items = $stmt->get_result();
 
 $total = 0;
 
-$page_title = 'Shopping Cart';
+$page_title = t('cart_title');
 include 'includes/header.php';
 
 if (isset($_SESSION['success'])) {
@@ -34,18 +34,18 @@ if (isset($_SESSION['error'])) {
 }
 ?>
 
-<h1>Shopping Cart</h1>
+<h1><?php echo t('cart_title'); ?></h1>
 
 <?php if ($cart_items->num_rows > 0): ?>
     <table class="cart-table">
         <thead>
             <tr>
-                <th>Product</th>
-                <th>Seller</th>
-                <th>Price</th>
-                <th>Quantity</th>
-                <th>Total</th>
-                <th>Action</th>
+                <th><?php echo t('cart_table_product'); ?></th>
+                <th><?php echo t('cart_table_seller'); ?></th>
+                <th><?php echo t('cart_table_price'); ?></th>
+                <th><?php echo t('cart_table_quantity'); ?></th>
+                <th><?php echo t('cart_table_total'); ?></th>
+                <th><?php echo t('cart_table_action'); ?></th>
             </tr>
         </thead>
         <tbody>
@@ -79,8 +79,10 @@ if (isset($_SESSION['error'])) {
                     <td><?php echo formatPrice($item_total); ?></td>
                     <td>
                         <a href="api/remove_from_cart.php?id=<?php echo $item['id']; ?>" 
-                           class="btn btn-secondary" 
-                           onclick="return confirm('Remove this item from cart?')">Remove</a>
+                           class="btn btn-secondary"
+                           onclick="return confirm('<?php echo t('cart_remove_confirm'); ?>');">
+                            <?php echo t('cart_remove_button'); ?>
+                        </a>
                     </td>
                 </tr>
             <?php endwhile; ?>
@@ -88,11 +90,11 @@ if (isset($_SESSION['error'])) {
     </table>
     
     <div class="cart-total">
-        <p>Total: <?php echo formatPrice($total); ?></p>
-        <a href="checkout.php" class="btn btn-primary">Proceed to Checkout</a>
+        <p><?php echo t('cart_total_label'); ?> <?php echo formatPrice($total); ?></p>
+        <a href="checkout.php" class="btn btn-primary"><?php echo t('cart_checkout_button'); ?></a>
     </div>
 <?php else: ?>
-    <p>Your cart is empty. <a href="index.php">Continue Shopping</a></p>
+    <p><?php echo t('cart_empty_message'); ?> <a href="index.php"><?php echo t('cart_empty_continue'); ?></a></p>
 <?php endif; ?>
 
 <?php include 'includes/footer.php'; ?>

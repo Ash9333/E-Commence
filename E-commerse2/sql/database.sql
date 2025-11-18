@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS users (
     full_name VARCHAR(100) NOT NULL,
     phone VARCHAR(20),
     address TEXT,
+    language VARCHAR(10) DEFAULT NULL,
     role ENUM('customer', 'seller', 'admin') DEFAULT 'customer',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -91,22 +92,25 @@ CREATE TABLE IF NOT EXISTS order_items (
     FOREIGN KEY (seller_id) REFERENCES users(id)
 );
 
+-- Insert Sample Data
+INSERT INTO users (username, email, password, full_name, role) VALUES
+('Ash', 'ashtonyeap1@gmail.com', '123456', 'Admin User', 'admin');
 
-INSERT INTO categories (name, description) VALUES
+INSERT INTO IF NOT EXISTS categories (name, description) VALUES
 ('Electronics', 'Electronic devices and accessories'),
 ('Clothing', 'Fashion and apparel'),
 ('Home & Kitchen', 'Home and kitchen essentials'),
 ('Books', 'Books and literature'),
 ('Sports', 'Sports and outdoor equipment');
 
-INSERT INTO products (name, description, price, stock) VALUES
+INSERT INTO IF NOT EXISTS products (name, description, price, stock) VALUES
 ('Smartphone XYZ', 'Latest smartphone with advanced features', 299.99, 50),
 ('Wireless Headphones', 'Premium wireless headphones', 89.99, 30),
 ('Cotton T-Shirt', 'Comfortable cotton t-shirt', 19.99, 100),
 ('Laptop Stand', 'Ergonomic laptop stand', 39.99, 25),
 ('Programming Book', 'Learn PHP and MySQL', 49.99, 15);
 
-INSERT INTO product_categories (product_id, category_id) VALUES
+INSERT INTO IF NOT EXISTS product_categories (product_id, category_id) VALUES
 (1, 1), (2, 1), (3, 2), (4, 1), (5, 4);
 
 CREATE TABLE IF NOT EXISTS password_resets (

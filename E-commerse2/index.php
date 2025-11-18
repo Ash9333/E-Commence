@@ -7,16 +7,17 @@ $search = isset($_GET['search']) ? sanitize($_GET['search']) : null;
 $products = getProducts($category_id, $search);
 $categories = getCategories();
 
-$page_title = 'Shop - Online Shopping';
+$page_title = t('brand_name');
+
 include 'includes/header.php';
 ?>
 
 <div class="categories">
-    <a href="index.php" class="category-btn <?php echo !$category_id ? 'active' : ''; ?>">All</a>
+    <a href="index.php" class="category-btn <?php echo !$category_id ? 'active' : ''; ?>"><?php echo htmlspecialchars(translateCategoryLabel('All')); ?></a>
     <?php while ($category = $categories->fetch_assoc()): ?>
         <a href="index.php?category=<?php echo $category['id']; ?>" 
            class="category-btn <?php echo $category_id == $category['id'] ? 'active' : ''; ?>">
-            <?php echo htmlspecialchars($category['name']); ?>
+            <?php echo htmlspecialchars(translateCategoryLabel($category['name'])); ?>
         </a>
     <?php endwhile; ?>
 </div>
@@ -41,11 +42,11 @@ include 'includes/header.php';
                         <?php echo formatPrice($product['min_price']); ?> - <?php echo formatPrice($product['max_price']); ?>
                     <?php endif; ?>
                 </div>
-                <div class="product-stock">Stock: <?php echo $product['stock']; ?></div>
+                <div class="product-stock"><?php echo t('product_stock_label'); ?>: <?php echo $product['stock']; ?></div>
                 <?php if (isLoggedIn()): ?>
-                    <a href="product.php?id=<?php echo $product['id']; ?>" class="btn btn-primary">View Details</a>
+                    <a href="product.php?id=<?php echo $product['id']; ?>" class="btn btn-primary"><?php echo t('home_view_details'); ?></a>
                 <?php else: ?>
-                    <a href="login.php" class="btn btn-secondary">Login to Buy</a>
+                    <a href="login.php" class="btn btn-secondary"><?php echo t('home_login_to_buy'); ?></a>
                 <?php endif; ?>
             </div>
         </div>
