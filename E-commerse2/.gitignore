@@ -1,2 +1,31 @@
+# Configuration files
 config/database.php
+config/mail.php
+
+# Uploads directory
 uploads/*
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Dependencies
+/vendor/
+
+# Logs
+*.log
+
+# IDE specific files
+.idea/
+.vscode/
+*.sublime-*
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db

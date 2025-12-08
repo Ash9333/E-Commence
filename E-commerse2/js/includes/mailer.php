@@ -2,20 +2,25 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-require_once __DIR__ . '/../vendor/autoload.php';
+require_once dirname(__DIR__, 2) . '/vendor/autoload.php';
+
+// Load mail configuration
+$mailConfig = require dirname(__DIR__, 2) . '/config/mail.php';
 
 function createMailer(): PHPMailer {
+    global $mailConfig;
+    
     $mail = new PHPMailer(true);
+    $smtp = $mailConfig['smtp'];
 
     $mail->isSMTP();
-    $mail->Host = 'smtp.gmail.com';
+    $mail->Host = $smtp['host'];
     $mail->SMTPAuth = true;
-    $mail->Username = 'ashtonyeap1@gmail.com';
-    $mail->Password = 'ytlyfoixejezefxm';
-    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-    $mail->Port = 587;
-
-    $mail->setFrom('no-reply@ashtonyeap1.com', 'Shop');
+    $mail->Username = $smtp['username'];
+    $mail->Password = $smtp['password'];
+    $mail->Port = $smtp['port'];
+    $mail->SMTPSecure = $smtp['encryption'];
+    $mail->setFrom($smtp['from']['email'], $smtp['from']['name']);
     $mail->isHTML(true);
 
     return $mail;

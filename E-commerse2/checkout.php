@@ -1,6 +1,6 @@
 <?php
-require_once 'config/database.php';
-require_once 'includes/functions.php';
+require_once __DIR__ . '/config/database.php';
+require_once 'js/includes/functions.php';
 
 if (!isLoggedIn()) {
     header('Location: login.php');
@@ -90,7 +90,7 @@ $stmt->execute();
 $user = $stmt->get_result()->fetch_assoc();
 
 $page_title = 'Checkout';
-include 'includes/header.php';
+include 'js/includes/header.php';
 
 if (isset($_SESSION['error'])) {
     echo '<div class="alert alert-error">' . $_SESSION['error'] . '</div>';
@@ -148,4 +148,4 @@ if (isset($_SESSION['error'])) {
     </div>
 </div>
 
-<?php include 'includes/footer.php'; ?>
+<?php include 'js/includes/footer.php'; ?>

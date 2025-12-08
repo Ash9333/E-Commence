@@ -1,6 +1,6 @@
 <?php
 require_once '../config/database.php';
-require_once '../includes/functions.php';
+require_once '../js/includes/functions.php';
 
 if (!isLoggedIn() || !isAdmin()) {
     header('Location: ../login.php');
@@ -40,73 +40,106 @@ $stats['sellers'] = $result->fetch_assoc()['count'];
 $base_url = '../';
 $page_title = 'Admin Dashboard';
 $hide_nav = true;
-include $base_url . 'includes/header.php';
+include $base_url . 'js/includes/header.php';
 ?>
 
-<div style="margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center;">
+<div class="page-header">
     <div>
         <h1>Admin Dashboard</h1>
         <p>Welcome back, <?php echo htmlspecialchars($_SESSION['username']); ?>!</p>
     </div>
-    <button type="button" id="theme-toggle" class="theme-toggle">
-        Night
+    <button
+        type="button"
+        id="theme-toggle"
+        class="theme-toggle"
+        data-label-night="<?php echo htmlspecialchars(t('theme_night'), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?>"
+        data-label-light="<?php echo htmlspecialchars(t('theme_light'), ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8'); ?>">
+        <i class="bi bi-moon-fill theme-toggle-icon" aria-hidden="true"></i>
+        <span class="theme-toggle-text"><?php echo t('theme_night'); ?></span>
     </button>
 </div>
 
 <!-- Statistics Cards -->
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 40px;">
-    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-        <div style="font-size: 2.5rem; font-weight: bold; margin-bottom: 10px;"><?php echo $stats['products']; ?></div>
+<div class="stats-grid">
+    <div class="stats-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+        <div style="font-size: 2.5rem; font-weight: bold; margin-bottom: 10px;">
+            <i class="bi bi-box-seam stats-icon" aria-hidden="true"></i>
+            <?php echo $stats['products']; ?>
+        </div>
         <div style="font-size: 1rem; opacity: 0.9;">Total Products</div>
     </div>
     
-    <div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-        <div style="font-size: 2.5rem; font-weight: bold; margin-bottom: 10px;"><?php echo $stats['orders']; ?></div>
+    <div class="stats-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white;">
+        <div style="font-size: 2.5rem; font-weight: bold; margin-bottom: 10px;">
+            <i class="bi bi-cart-check stats-icon" aria-hidden="true"></i>
+            <?php echo $stats['orders']; ?>
+        </div>
         <div style="font-size: 1rem; opacity: 0.9;">Total Orders</div>
     </div>
     
-    <div style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-        <div style="font-size: 2.5rem; font-weight: bold; margin-bottom: 10px;"><?php echo $stats['users']; ?></div>
+    <div class="stats-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white;">
+        <div style="font-size: 2.5rem; font-weight: bold; margin-bottom: 10px;">
+            <i class="bi bi-people-fill stats-icon" aria-hidden="true"></i>
+            <?php echo $stats['users']; ?>
+        </div>
         <div style="font-size: 1rem; opacity: 0.9;">Total Users</div>
     </div>
     
-    <div style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-        <div style="font-size: 2.5rem; font-weight: bold; margin-bottom: 10px;">$<?php echo number_format($stats['platform_revenue'], 2); ?></div>
+    <div class="stats-card" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color: white;">
+        <div style="font-size: 2.5rem; font-weight: bold; margin-bottom: 10px;">
+            <i class="bi bi-cash-coin stats-icon" aria-hidden="true"></i>
+            $<?php echo number_format($stats['platform_revenue'], 2); ?>
+        </div>
         <div style="font-size: 1rem; opacity: 0.9;">Platform Revenue (10% of delivered)</div>
     </div>
     
-    <div style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); color: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-        <div style="font-size: 2.5rem; font-weight: bold; margin-bottom: 10px;"><?php echo $stats['pending_orders']; ?></div>
+    <div class="stats-card" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); color: white;">
+        <div style="font-size: 2.5rem; font-weight: bold; margin-bottom: 10px;">
+            <i class="bi bi-hourglass-split stats-icon" aria-hidden="true"></i>
+            <?php echo $stats['pending_orders']; ?>
+        </div>
         <div style="font-size: 1rem; opacity: 0.9;">Pending Orders</div>
     </div>
     
-    <div style="background: linear-gradient(135deg, #30cfd0 0%, #330867 100%); color: white; padding: 25px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
-        <div style="font-size: 2.5rem; font-weight: bold; margin-bottom: 10px;"><?php echo $stats['sellers']; ?></div>
+    <div class="stats-card" style="background: linear-gradient(135deg, #30cfd0 0%, #330867 100%); color: white;">
+        <div style="font-size: 2.5rem; font-weight: bold; margin-bottom: 10px;">
+            <i class="bi bi-shop stats-icon" aria-hidden="true"></i>
+            <?php echo $stats['sellers']; ?>
+        </div>
         <div style="font-size: 1rem; opacity: 0.9;">Total Sellers</div>
     </div>
 </div>
 
 <!-- Quick Actions -->
-<h2 style="margin-bottom: 20px;">Quick Actions</h2>
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin: 30px 0;">
-    <a href="products.php" class="btn btn-primary" style="padding: 30px; text-align: center; font-size: 1.2rem; text-decoration: none; display: block;">
-        📦 Manage Products
+<h2 class="section-title">Quick Actions</h2>
+<div class="quick-actions-grid">
+    <a href="products.php" class="btn btn-primary quick-action-link">
+        <i class="bi bi-box-seam quick-action-icon" aria-hidden="true"></i>
+        Manage Products
     </a>
-    <a href="orders.php" class="btn btn-secondary" style="padding: 30px; text-align: center; font-size: 1.2rem; text-decoration: none; display: block;">
-        🛒 Manage Orders
+    <a href="orders.php" class="btn btn-secondary quick-action-link">
+        <i class="bi bi-cart-check quick-action-icon" aria-hidden="true"></i>
+        Manage Orders
     </a>
-    <a href="users.php" class="btn btn-secondary" style="padding: 30px; text-align: center; font-size: 1.2rem; text-decoration: none; display: block;">
-        👥 Manage Users
+    <a href="users.php" class="btn btn-secondary quick-action-link">
+        <i class="bi bi-people-fill quick-action-icon" aria-hidden="true"></i>
+        Manage Users
     </a>
-    <a href="categories.php" class="btn btn-secondary" style="padding: 30px; text-align: center; font-size: 1.2rem; text-decoration: none; display: block;">
-        📁 Manage Categories
+    <a href="categories.php" class="btn btn-secondary quick-action-link">
+        <i class="bi bi-folder2-open quick-action-icon" aria-hidden="true"></i>
+        Manage Categories
     </a>
-    <a href="../index.php" class="btn btn-secondary" style="padding: 30px; text-align: center; font-size: 1.2rem; text-decoration: none; display: block;">
-        🏠 View Store
+    <a href="../index.php" class="btn btn-secondary quick-action-link">
+        <i class="bi bi-house-door quick-action-icon" aria-hidden="true"></i>
+        View Store
     </a>
-    <a href="../logout.php" class="btn btn-secondary" style="padding: 30px; text-align: center; font-size: 1.2rem; text-decoration: none; display: block; background: #dc3545;">
-        🚪 Logout
+    <a href="../logout.php" class="btn btn-danger quick-action-link">
+        <i class="bi bi-box-arrow-right quick-action-icon" aria-hidden="true"></i>
+        Logout
     </a>
 </div>
 
-<?php include '../includes/footer.php'; ?>
+<?php include '../js/includes/footer.php'; ?>
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.min.js" integrity="sha384-G/EV+4j2dNv+tEPo3++6LCgdCROaejBqfUeNjuKAiuXbjrxilcCdDz6ZAVfHWe1Y" crossorigin="anonymous"></script>

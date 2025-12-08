@@ -1,6 +1,6 @@
 <?php
-require_once 'config/database.php';
-require_once 'includes/functions.php';
+require_once __DIR__ . '/config/database.php';
+require_once 'js/includes/functions.php';
 
 if (!isLoggedIn()) {
     header('Location: login.php');
@@ -22,7 +22,7 @@ $cart_items = $stmt->get_result();
 $total = 0;
 
 $page_title = t('cart_title');
-include 'includes/header.php';
+include 'js/includes/header.php';
 
 if (isset($_SESSION['success'])) {
     echo '<div class="alert alert-success">' . $_SESSION['success'] . '</div>';
@@ -97,4 +97,4 @@ if (isset($_SESSION['error'])) {
     <p><?php echo t('cart_empty_message'); ?> <a href="index.php"><?php echo t('cart_empty_continue'); ?></a></p>
 <?php endif; ?>
 
-<?php include 'includes/footer.php'; ?>
+<?php include 'js/includes/footer.php'; ?>

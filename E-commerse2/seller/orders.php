@@ -1,7 +1,7 @@
 <?php
 require_once '../config/database.php';
-require_once '../includes/functions.php';
-require_once '../includes/mailer.php';
+require_once '../js/includes/functions.php';
+require_once '../js/includes/mailer.php';
 
 if (!isLoggedIn() || !isSeller()) {
     header('Location: ../login.php');
@@ -69,7 +69,7 @@ $orders = $stmt->get_result();
 
 $page_title = t('seller_orders_title');
 $base_url   = '../';
-include '../includes/header.php';
+include '../js/includes/header.php';
 
 if (isset($_SESSION['success'])) {
     echo '<div class="alert alert-success">' . $_SESSION['success'] . '</div>';
@@ -126,4 +126,4 @@ if (isset($_SESSION['success'])) {
     <a href="index.php" class="btn btn-secondary"><?php echo t('seller_orders_back_to_dashboard'); ?></a>
 </div>
 
-<?php include '../includes/footer.php'; ?>
+<?php include '../js/includes/footer.php'; ?>

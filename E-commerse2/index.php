@@ -1,23 +1,41 @@
 <?php
-require_once 'config/database.php';
-require_once 'includes/functions.php';
+require_once __DIR__ . '/config/database.php';
+require_once 'js/includes/functions.php';
 
 $category_id = isset($_GET['category']) ? (int)$_GET['category'] : null;
 $search = isset($_GET['search']) ? sanitize($_GET['search']) : null;
 $products = getProducts($category_id, $search);
 $categories = getCategories();
 
+// Map some known category names to icons (fallback to tag icon)
+$category_icon_map = [
+    'books'          => 'bi-book',
+    'clothing'       => 'bi-bag',
+    'electronics'    => 'bi-tv',
+    'home & kitchen' => 'bi-house-heart',
+    'home and kitchen' => 'bi-house-heart',
+    'sports'         => 'bi-trophy',
+];
+
 $page_title = t('brand_name');
 
-include 'includes/header.php';
+include 'js/includes/header.php';
 ?>
 
 <div class="categories">
-    <a href="index.php" class="category-btn <?php echo !$category_id ? 'active' : ''; ?>"><?php echo htmlspecialchars(translateCategoryLabel('All')); ?></a>
+    <a href="index.php" class="category-btn <?php echo !$category_id ? 'active' : ''; ?>">
+        <i class="bi bi-grid-fill category-icon" aria-hidden="true"></i>
+        <span><?php echo htmlspecialchars(translateCategoryLabel('All')); ?></span>
+    </a>
     <?php while ($category = $categories->fetch_assoc()): ?>
+        <?php
+            $key = strtolower(trim($category['name']));
+            $icon_class = isset($category_icon_map[$key]) ? $category_icon_map[$key] : 'bi-tag';
+        ?>
         <a href="index.php?category=<?php echo $category['id']; ?>" 
            class="category-btn <?php echo $category_id == $category['id'] ? 'active' : ''; ?>">
-            <?php echo htmlspecialchars(translateCategoryLabel($category['name'])); ?>
+            <i class="bi <?php echo $icon_class; ?> category-icon" aria-hidden="true"></i>
+            <span><?php echo htmlspecialchars(translateCategoryLabel($category['name'])); ?></span>
         </a>
     <?php endwhile; ?>
 </div>
@@ -53,4 +71,4 @@ include 'includes/header.php';
     <?php endwhile; ?>
 </div>
 
-<?php include 'includes/footer.php'; ?>
+<?php include 'js/includes/footer.php'; ?>

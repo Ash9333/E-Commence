@@ -1,6 +1,6 @@
 <?php
 require_once 'config/database.php';
-require_once 'includes/functions.php';
+require_once 'js/includes/functions.php';
 
 if (!isset($_GET['id'])) {
     header('Location: index.php');
@@ -31,7 +31,7 @@ $stmt->execute();
 $product_categories = $stmt->get_result();
 
 $page_title = htmlspecialchars($product['name']);
-include 'includes/header.php';
+include 'js/includes/header.php';
 ?>
 
 <div class="product-detail">
@@ -103,4 +103,4 @@ include 'includes/header.php';
     </div>
 </div>
 
-<?php include 'includes/footer.php'; ?>
+<?php include 'js/includes/footer.php'; ?>

@@ -1,6 +1,6 @@
 <?php
-require_once '../config/database.php';
-require_once '../includes/functions.php';
+require_once dirname(__DIR__) . '/config/database.php';
+require_once '../js/includes/functions.php';
 
 if (!isLoggedIn() || !isAdmin()) {
     header('Location: ../login.php');
@@ -132,7 +132,7 @@ $sellers = getSellers();
 $page_title = 'Product Management';
 $base_url = '../';
 $hide_nav = true;
-include '../includes/header.php';
+include '../js/includes/header.php';
 
 if (isset($_SESSION['success'])) {
     echo '<div class="alert alert-success">' . $_SESSION['success'] . '</div>';
@@ -381,5 +381,5 @@ if ($action === 'delete' && $product_id) {
 }
 ?>
 
-<?php include '../includes/footer.php'; ?>
+<?php include '../js/includes/footer.php'; ?>
 <script src="../js/admin_products.js"></script>

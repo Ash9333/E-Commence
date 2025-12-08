@@ -1,6 +1,6 @@
 <?php
 require_once 'config/database.php';
-require_once 'includes/functions.php';
+require_once 'js/includes/functions.php';
 
 if (isLoggedIn()) {
     header('Location: index.php');
@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $page_title = 'Register';
-include 'includes/header.php';
+include 'js/includes/header.php';
 ?>
 
 <div class="form-container">
@@ -85,4 +85,4 @@ include 'includes/header.php';
     </p>
 </div>
 
-<?php include 'includes/footer.php'; ?>
+<?php include 'js/includes/footer.php'; ?>

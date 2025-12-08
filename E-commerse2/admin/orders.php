@@ -1,7 +1,7 @@
 <?php
 require_once '../config/database.php';
-require_once '../includes/functions.php';
-require_once '../includes/mailer.php';
+require_once '../js/includes/functions.php';
+require_once '../js/includes/mailer.php';
 
 if (!isLoggedIn() || !isAdmin()) {
     header('Location: ../login.php');
@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $action === 'update_status') {
 $page_title = 'Manage Orders';
 $base_url = '../';
 $hide_nav = true;
-include '../includes/header.php';
+include '../js/includes/header.php';
 
 if (isset($_SESSION['success'])) {
     echo '<div class="alert alert-success">' . $_SESSION['success'] . '</div>';
@@ -61,11 +61,11 @@ if (isset($_SESSION['error'])) {
 }
 ?>
 
-<div style="margin-bottom: 20px;">
+<div class="page-actions mb-3">
     <a href="index.php" class="btn btn-secondary">← Back to Dashboard</a>
 </div>
 
-<h1>Manage Orders</h1>
+<h1 class="mb-4">Manage Orders</h1>
 
 <?php
 // Get all orders
@@ -95,14 +95,13 @@ $orders = $stmt->get_result();
                     <td>#<?php echo $order['id']; ?></td>
                     <td>
                         <strong><?php echo htmlspecialchars($order['full_name']); ?></strong><br>
-                        <small style="color: #666;"><?php echo htmlspecialchars($order['email']); ?></small>
+                        <small class="text-muted"><?php echo htmlspecialchars($order['email']); ?></small>
                     </td>
                     <td><?php echo formatPrice($order['total_amount']); ?></td>
                     <td>
                         <form method="POST" style="display: inline;">
                             <input type="hidden" name="order_id" value="<?php echo $order['id']; ?>">
-                            <select name="status" onchange="this.form.submit()" 
-                                    style="padding: 5px; border-radius: 4px; border: 1px solid #ddd;">
+                            <select name="status" class="table-select" onchange="this.form.submit()">
                                 <option value="pending" <?php echo $order['status'] === 'pending' ? 'selected' : ''; ?>>Pending</option>
                                 <option value="processing" <?php echo $order['status'] === 'processing' ? 'selected' : ''; ?>>Processing</option>
                                 <option value="shipped" <?php echo $order['status'] === 'shipped' ? 'selected' : ''; ?>>Shipped</option>
@@ -125,4 +124,4 @@ $orders = $stmt->get_result();
     </tbody>
 </table>
 
-<?php include '../includes/footer.php'; ?>
+<?php include '../js/includes/footer.php'; ?>

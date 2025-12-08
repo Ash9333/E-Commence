@@ -1,6 +1,6 @@
 <?php
 require_once 'config/database.php';
-require_once 'includes/functions.php';
+require_once 'js/includes/functions.php';
 
 if (!isLoggedIn()) {
     header('Location: login.php');
@@ -44,7 +44,7 @@ $stmt->execute();
 $order_items = $stmt->get_result();
 
 $page_title = t('order_details_title') . ' #' . $order_id;
-include 'includes/header.php';
+include 'js/includes/header.php';
 
 if (isset($_SESSION['error'])) {
     echo '<div class="alert alert-error">' . $_SESSION['error'] . '</div>';
@@ -211,4 +211,4 @@ if (isset($_SESSION['success'])) {
     </div>
 </div>
 
-<?php include 'includes/footer.php'; ?>
+<?php include 'js/includes/footer.php'; ?>

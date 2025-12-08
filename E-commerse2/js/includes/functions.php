@@ -1,5 +1,6 @@
 <?php
-require_once __DIR__ . '/../config/database.php';
+// Use absolute path to avoid include issues
+require_once dirname(__DIR__, 2) . '/config/database.php';
 require_once __DIR__ . '/lang.php';
 
 function isLoggedIn() {

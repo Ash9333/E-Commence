@@ -1,7 +1,7 @@
 <?php
 require_once '../config/database.php';
-require_once '../includes/functions.php';
-require_once '../includes/mailer.php';
+require_once '../js/includes/functions.php';
+require_once '../js/includes/mailer.php';
 
 if (!isLoggedIn() || !isAdmin()) {
     header('Location: ../login.php');
@@ -79,7 +79,7 @@ $order_items = $stmt->get_result();
 $page_title = 'Order Details #' . $order_id;
 $base_url = '../';
 $hide_nav = true;
-include '../includes/header.php';
+include '../js/includes/header.php';
 
 if (isset($_SESSION['success'])) {
     echo '<div class="alert alert-success">' . $_SESSION['success'] . '</div>';
@@ -216,4 +216,4 @@ if (isset($_SESSION['success'])) {
     </div>
 </div>
 
-<?php include '../includes/footer.php'; ?>
+<?php include '../js/includes/footer.php'; ?>

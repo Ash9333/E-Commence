@@ -1,6 +1,6 @@
 <?php
-require_once 'config/database.php';
-require_once 'includes/functions.php';
+require_once __DIR__ . '/config/database.php';
+require_once 'js/includes/functions.php';
 
 if (!isLoggedIn()) {
     header('Location: login.php');
@@ -22,7 +22,7 @@ $stmt->execute();
 
 // Update session role
 $_SESSION['role'] = 'seller';
-$_SESSION['success'] = 'Your account has been upgraded. You can now sell products.';
+$_SESSION['success'] = 'Your account has been updated. You can now sell products.';
 
 header('Location: seller/index.php');
 exit;

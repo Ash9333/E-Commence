@@ -1,6 +1,6 @@
 <?php
 require_once '../config/database.php';
-require_once '../includes/functions.php';
+require_once '../js/includes/functions.php';
 
 if (!isLoggedIn() || !isSeller() || !isset($_GET['id'])) {
     header('Location: ../login.php');
@@ -85,7 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 $page_title = t('seller_edit_title');
 $base_url   = '../';
-include '../includes/header.php';
+include '../js/includes/header.php';
 
 if (isset($_SESSION['error'])) {
     echo '<div class="alert alert-error">' . $_SESSION['error'] . '</div>'; 
@@ -140,4 +140,4 @@ if (isset($_SESSION['error'])) {
     </form>
 </div>
 
-<?php include '../includes/footer.php'; ?>
+<?php include '../js/includes/footer.php'; ?>

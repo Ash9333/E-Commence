@@ -1,6 +1,6 @@
 <?php
 require_once '../config/database.php';
-require_once '../includes/functions.php';
+require_once '../js/includes/functions.php';
 
 if (!isLoggedIn() || !isSeller()) {
     header('Location: ../login.php');
@@ -40,7 +40,7 @@ $stats_net_revenue  = $stats_gross_revenue - $stats_platform_fee;
 
 $page_title = t('seller_dashboard_title');
 $base_url   = '../';
-include '../includes/header.php';
+include '../js/includes/header.php';
 
 if (isset($_SESSION['success'])) {
     echo '<div class="alert alert-success">' . $_SESSION['success'] . '</div>';
@@ -52,35 +52,59 @@ if (isset($_SESSION['success'])) {
 <p><?php echo sprintf(t('seller_dashboard_welcome'), htmlspecialchars($_SESSION['username'])); ?></p>
 
 <!-- Seller Stats -->
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin: 30px 0;">
-    <div style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-        <div style="font-size: 2rem; font-weight: bold; margin-bottom: 8px;"><?php echo (int)$stats_products; ?></div>
+<div class="stats-grid stats-grid-centered">
+    <div class="stats-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white;">
+        <div style="font-size: 2rem; font-weight: bold; margin-bottom: 8px;">
+            <i class="bi bi-box-seam stats-icon" aria-hidden="true"></i>
+            <?php echo (int)$stats_products; ?>
+        </div>
         <div><?php echo t('seller_dashboard_total_products'); ?></div>
     </div>
-    <div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-        <div style="font-size: 2rem; font-weight: bold; margin-bottom: 8px;"><?php echo (int)$stats_orders; ?></div>
+    <div class="stats-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white;">
+        <div style="font-size: 2rem; font-weight: bold; margin-bottom: 8px;">
+            <i class="bi bi-cart-check stats-icon" aria-hidden="true"></i>
+            <?php echo (int)$stats_orders; ?>
+        </div>
         <div><?php echo t('seller_dashboard_total_orders'); ?></div>
     </div>
-    <div style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-        <div style="font-size: 2rem; font-weight: bold; margin-bottom: 8px;"><?php echo formatPrice($stats_gross_revenue ?? 0); ?></div>
+    <div class="stats-card" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); color: white;">
+        <div style="font-size: 2rem; font-weight: bold; margin-bottom: 8px;">
+            <i class="bi bi-cash-coin stats-icon" aria-hidden="true"></i>
+            <?php echo formatPrice($stats_gross_revenue ?? 0); ?>
+        </div>
         <div><?php echo t('seller_dashboard_gross_revenue'); ?></div>
     </div>
-    <div style="background: linear-gradient(135deg, #f6d365 0%, #fda085 100%); color: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-        <div style="font-size: 2rem; font-weight: bold; margin-bottom: 8px;"><?php echo formatPrice($stats_platform_fee ?? 0); ?></div>
+    <div class="stats-card" style="background: linear-gradient(135deg, #f6d365 0%, #fda085 100%); color: white;">
+        <div style="font-size: 2rem; font-weight: bold; margin-bottom: 8px;">
+            <i class="bi bi-receipt-cutoff stats-icon" aria-hidden="true"></i>
+            <?php echo formatPrice($stats_platform_fee ?? 0); ?>
+        </div>
         <div><?php echo t('seller_dashboard_platform_fees'); ?></div>
     </div>
-    <div style="background: linear-gradient(135deg, #16a085 0%, #27ae60 100%); color: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
-        <div style="font-size: 2rem; font-weight: bold; margin-bottom: 8px;"><?php echo formatPrice($stats_net_revenue ?? 0); ?></div>
+    <div class="stats-card" style="background: linear-gradient(135deg, #16a085 0%, #27ae60 100%); color: white;">
+        <div style="font-size: 2rem; font-weight: bold; margin-bottom: 8px;">
+            <i class="bi bi-wallet2 stats-icon" aria-hidden="true"></i>
+            <?php echo formatPrice($stats_net_revenue ?? 0); ?>
+        </div>
         <div><?php echo t('seller_dashboard_net_revenue'); ?></div>
     </div>
 </div>
 
 <!-- Seller Quick Actions -->
-<h2 style="margin-bottom: 20px;"><?php echo t('seller_dashboard_actions'); ?></h2>
-<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-bottom: 40px;">
-    <a href="products.php" class="btn btn-primary" style="padding: 20px; text-align: center; font-size: 1.1rem; text-decoration: none; display: block;">📦 <?php echo t('seller_dashboard_my_products'); ?></a>
-    <a href="orders.php" class="btn btn-secondary" style="padding: 20px; text-align: center; font-size: 1.1rem; text-decoration: none; display: block;">🛒 <?php echo t('seller_dashboard_my_orders'); ?></a>
-    <a href="../index.php" class="btn btn-secondary" style="padding: 20px; text-align: center; font-size: 1.1rem; text-decoration: none; display: block;">🏠 <?php echo t('seller_dashboard_back_to_store'); ?></a>
+<h2 class="section-title"><?php echo t('seller_dashboard_actions'); ?></h2>
+<div class="quick-actions-grid">
+    <a href="products.php" class="btn btn-primary quick-action-link">
+        <i class="bi bi-box-seam quick-action-icon" aria-hidden="true"></i>
+        <?php echo t('seller_dashboard_my_products'); ?>
+    </a>
+    <a href="orders.php" class="btn btn-secondary quick-action-link">
+        <i class="bi bi-cart-check quick-action-icon" aria-hidden="true"></i>
+        <?php echo t('seller_dashboard_my_orders'); ?>
+    </a>
+    <a href="../index.php" class="btn btn-secondary quick-action-link">
+        <i class="bi bi-house-door quick-action-icon" aria-hidden="true"></i>
+        <?php echo t('seller_dashboard_back_to_store'); ?>
+    </a>
 </div>
 
-<?php include '../includes/footer.php'; ?>
+<?php include '../js/includes/footer.php'; ?>

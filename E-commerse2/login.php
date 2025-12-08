@@ -1,6 +1,7 @@
 <?php
 require_once 'config/database.php';
-require_once 'includes/functions.php';
+require_once 'js/includes/functions.php';
+require_once 'js/includes/mailer.php';
 
 if (isLoggedIn()) {
     if (isAdmin()) {
@@ -47,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $page_title = 'Login';
-include 'includes/header.php';
+include 'js/includes/header.php';
 ?>
 
 <?php if (isset($_SESSION['success'])): ?>
@@ -80,4 +81,4 @@ include 'includes/header.php';
     </p>
 </div>
 
-<?php include 'includes/footer.php'; ?>
+<?php include 'js/includes/footer.php'; ?>

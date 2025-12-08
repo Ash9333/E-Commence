@@ -1,6 +1,6 @@
 <?php
-require_once 'config/database.php';
-require_once 'includes/functions.php';
+require_once __DIR__ . '/config/database.php';
+require_once 'js/includes/functions.php';
 
 if (!isLoggedIn()) {
     header('Location: login.php');
@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $page_title = t('language_select_title');
-include 'includes/header.php';
+include 'js/includes/header.php';
 ?>
 
 <div class="form-container" style="max-width: 400px;">
@@ -64,4 +64,4 @@ include 'includes/header.php';
     </form>
 </div>
 
-<?php include 'includes/footer.php'; ?>
+<?php include 'js/includes/footer.php'; ?>

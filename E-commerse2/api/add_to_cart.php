@@ -1,6 +1,6 @@
 <?php
 require_once '../config/database.php';
-require_once '../includes/functions.php';
+require_once '../js/includes/functions.php';
 
 if (!isLoggedIn()) {
     header('Location: ../login.php');

@@ -20,12 +20,19 @@ document.addEventListener("DOMContentLoaded", function () {
   if (themeToggle) {
     const nightLabel = themeToggle.dataset.labelNight || "Night";
     const lightLabel = themeToggle.dataset.labelLight || "Light";
+    const iconEl = themeToggle.querySelector(".theme-toggle-icon");
+    const textEl = themeToggle.querySelector(".theme-toggle-text");
 
     function setThemeLabel(isDark) {
-      if (isDark) {
-        themeToggle.textContent = "☀️ " + lightLabel;
+      if (iconEl) {
+        iconEl.classList.toggle("bi-moon-fill", !isDark);
+        iconEl.classList.toggle("bi-sun-fill", isDark);
+      }
+
+      if (textEl) {
+        textEl.textContent = isDark ? lightLabel : nightLabel;
       } else {
-        themeToggle.textContent = "🌙 " + nightLabel;
+        themeToggle.textContent = isDark ? lightLabel : nightLabel;
       }
     }
 

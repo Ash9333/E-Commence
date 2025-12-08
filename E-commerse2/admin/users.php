@@ -1,6 +1,6 @@
 <?php
 require_once '../config/database.php';
-require_once '../includes/functions.php';
+require_once '../js/includes/functions.php';
 
 if (!isLoggedIn() || !isAdmin()) {
     header('Location: ../login.php');
@@ -67,7 +67,7 @@ if ($action === 'delete' && $user_id) {
 $page_title = 'Manage Users';
 $base_url = '../';
 $hide_nav = true;
-include '../includes/header.php';
+include '../js/includes/header.php';
 
 if (isset($_SESSION['success'])) {
     echo '<div class="alert alert-success">' . $_SESSION['success'] . '</div>';
@@ -79,7 +79,7 @@ if (isset($_SESSION['error'])) {
 }
 ?>
 
-<div style="margin-bottom: 20px;">
+<div class="page-actions mb-4">
     <a href="index.php" class="btn btn-secondary">← Back to Dashboard</a>
 </div>
 
@@ -113,10 +113,9 @@ $users = $stmt->get_result();
                     <td><?php echo htmlspecialchars($user['full_name']); ?></td>
                     <td><?php echo htmlspecialchars($user['email']); ?></td>
                     <td>
-                        <form method="POST" style="display: inline;">
+                        <form method="POST">
                             <input type="hidden" name="user_id" value="<?php echo $user['id']; ?>">
-                            <select name="role" onchange="this.form.submit()" 
-                                    style="padding: 5px; border-radius: 4px; border: 1px solid #ddd;">
+                            <select name="role" class="table-select" onchange="this.form.submit()">
                                 <option value="customer" <?php echo $user['role'] === 'customer' ? 'selected' : ''; ?>>Customer</option>
                                 <option value="seller" <?php echo $user['role'] === 'seller' ? 'selected' : ''; ?>>Seller</option>
                                 <option value="admin" <?php echo $user['role'] === 'admin' ? 'selected' : ''; ?>>Admin</option>
@@ -127,21 +126,21 @@ $users = $stmt->get_result();
                     <td>
                         <?php if ($user['id'] != $_SESSION['user_id']): ?>
                             <a href="users.php?action=delete&id=<?php echo $user['id']; ?>" 
-                               class="btn btn-secondary" 
-                               onclick="return confirm('Are you sure you want to delete this user?')"
-                               style="background: #dc3545;">Delete</a>
+                               class="btn btn-danger" 
+                               onclick="return confirm('Are you sure you want to delete this user?')">Delete</a>
                         <?php else: ?>
-                            <span style="color: #666; font-size: 0.9rem;">Current User</span>
+                            <span class="text-muted">Current User</span>
                         <?php endif; ?>
                     </td>
                 </tr>
             <?php endwhile; ?>
         <?php else: ?>
             <tr>
+                <td colspan="7" class="text-center p-4">No users found.</td>
                 <td colspan="7" style="text-align: center; padding: 20px;">No users found.</td>
             </tr>
         <?php endif; ?>
     </tbody>
 </table>
 
-<?php include '../includes/footer.php'; ?>
+<?php include '../js/includes/footer.php'; ?>

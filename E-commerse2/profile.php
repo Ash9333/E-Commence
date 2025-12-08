@@ -1,6 +1,6 @@
 <?php
 require_once 'config/database.php';
-require_once 'includes/functions.php';
+require_once 'js/includes/functions.php';
 
 if (!isLoggedIn()) {
     header('Location: login.php');
@@ -77,7 +77,7 @@ $stmt->execute();
 $user = $stmt->get_result()->fetch_assoc();
 
 $page_title = t('profile_title');
-include 'includes/header.php';
+include 'js/includes/header.php';
 ?>
 
 <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 20px; margin-top: 30px;">
@@ -168,4 +168,4 @@ include 'includes/header.php';
     </div>
 </div>
 
-<?php include 'includes/footer.php'; ?>
+<?php include 'js/includes/footer.php'; ?>

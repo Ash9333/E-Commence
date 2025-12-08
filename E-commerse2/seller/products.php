@@ -1,6 +1,6 @@
 <?php
 require_once '../config/database.php';
-require_once '../includes/functions.php';
+require_once '../js/includes/functions.php';
 
 if (!isLoggedIn() || !isSeller()) {
     header('Location: ../login.php');
@@ -139,7 +139,7 @@ $products = $stmt->get_result();
 
 $page_title = t('seller_products_title');
 $base_url   = '../';
-include '../includes/header.php';
+include '../js/includes/header.php';
 
 if (isset($_SESSION['success'])) {
     echo '<div class="alert alert-success">' . $_SESSION['success'] . '</div>';
@@ -247,4 +247,4 @@ if (isset($_SESSION['success'])) {
     </a>
 </div>
 
-<?php include '../includes/footer.php'; ?>
+<?php include '../js/includes/footer.php'; ?>
